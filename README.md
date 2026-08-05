@@ -62,22 +62,21 @@ Follow these steps to run the project locally on your machine.
    python manage.py runserver
    ```
 
-## 🌍 Deployment (Render)
+## 🌍 Deployment (Render + Neon DB + External Redis)
 
-This project is fully configured for 1-click deployment on Render.com.
+This project is fully configured for deployment on Render.com, utilizing **Neon DB** for serverless PostgreSQL and a third-party Redis provider (like **Upstash** or **Redis Cloud**).
 
 1. Create a new **Web Service** on Render and connect your GitHub repository.
 2. Under the service settings, configure the following:
    * **Build Command:** `./build.sh`
    * **Start Command:** `gunicorn utsav.wsgi:application`
-3. Add a **Redis instance** and a **PostgreSQL database** on Render.
-4. Add the following **Environment Variables** to your Web Service:
+3. Add the following **Environment Variables** to your Web Service:
    * `SECRET_KEY`: Set to a long, random string.
    * `DEBUG`: `False`
    * `ALLOWED_HOSTS`: `<your-app-name>.onrender.com`
-   * `DATABASE_URL`: Your Render PostgreSQL Internal DB URL.
-   * `CACHE_URL`: Your Render Redis Internal URL.
-5. Click **Deploy**. Render will automatically install dependencies, collect static files, and migrate the database.
+   * `DATABASE_URL`: Your **Neon DB** connection string (e.g., `postgres://user:pass@ep-rest-of-url.neon.tech/dbname?sslmode=require`).
+   * `CACHE_URL`: Your third-party Redis connection string (e.g., from Upstash).
+5. Click **Deploy**. Render will automatically install dependencies, collect static files, and migrate the remote database.
 
 ## 📡 API Endpoints
 
