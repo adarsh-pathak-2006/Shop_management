@@ -13,12 +13,13 @@ class CategoryAPI(APIView):
             return Response(cached_data, status=200)
         data=Category.objects.all()
         serial=CategorySerializer(data, many=True)
+        cache.set("category", serial.data, timeout=300)
         return Response(serial.data, status=200)
 
     def post(self, request):
         serial=CategorySerializer(data=request.data)
         if serial.is_valid():
-            cache.set("category", serial.data, timeout=300)
+            cache.delete("category")
             serial.save()
             return Response(serial.data, status=201)
         return Response(serial.errors, status=400)
@@ -30,6 +31,7 @@ class CategoryIndividualAPI(APIView):
             return Response(cached_data, status=200)
         data=get_object_or_404(Category, id=pk)
         serial=CategorySerializer(data)
+        cache.set(f"category_{pk}", serial.data, timeout=300)
         return Response(serial.data, status=200)
 
     def put(self, request, pk):
@@ -37,6 +39,7 @@ class CategoryIndividualAPI(APIView):
         serial=CategorySerializer(instance, data=request.data, partial=True)
         if serial.is_valid():
             cache.delete(f"category_{pk}")
+            cache.delete("category")
             serial.save()
             return Response(serial.data, request=200)
         return Response(serial.errors, status=400)
@@ -44,6 +47,7 @@ class CategoryIndividualAPI(APIView):
     def delete(self, request, pk):
         data=get_object_or_404(Category, id=pk)
         cache.delete(f"category_{pk}", status=204)
+        cache.delete("category")
         data.delete()
         return Response({'message':'data deleted'}, status=204)
 
@@ -55,12 +59,13 @@ class ProductAPI(APIView):
             return Response(cached_data, status=200)
         data=Product.objects.all()
         serial=ProductSerializer(data, many=True)
+        cache.set("product", serial.data, timeout=300)
         return Response(serial.data, status=200)
 
     def post(self, request):
         serial=ProductWriteSerializer(data=request.data)
         if serial.is_valid():
-            cache.set("product")
+            cache.delete("product")
             serial.save()
             return Response(serial.data, status=201)
         return Response(serial.errors, status=400)
@@ -72,6 +77,7 @@ class ProductIndividualAPI(APIView):
             return Response(cached_data, status=200)
         data=get_object_or_404(Product, id=pk)
         serial=ProductSerializer(data)
+        cache.set(f"product_{pk}", serial.data, timeout=300)
         return Response(serial.data, status=200)
 
     def put(self, request, pk):
@@ -79,6 +85,7 @@ class ProductIndividualAPI(APIView):
         serial=ProductWriteSerializer(instance, data=request.data, partial=True)
         if serial.is_valid():
             cache.delete(f"product_{pk}")
+            cache.delete("product")
             serial.save()
             return Response(serial.data, status=200)
         return Response(serial.errors, status=400)
@@ -86,6 +93,7 @@ class ProductIndividualAPI(APIView):
     def delete(self, request, pk):
         data=get_object_or_404(Product, id=pk)
         cache.delete(f"product_{pk}")
+        cache.delete("product")
         data.delete()
         return Response({'message':'data deleted'}, status=204)
         
