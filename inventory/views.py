@@ -83,4 +83,9 @@ class ProductIndividualAPI(APIView):
             return Response(serial.data, status=200)
         return Response(serial.errors, status=400)
 
+    def delete(self, request, pk):
+        data=get_object_or_404(Product, id=pk)
+        cache.delete(f"product_{pk}")
+        data.delete()
+        return Response({'message':'data deleted'}, status=204)
         
