@@ -20,3 +20,9 @@ class SaleSerializers(ModelSerializer):
     class Meta:
         model=Sale
         fields='__all__'
+
+class SaleWriteSerializer(ModelSerializer):
+    products=PrimaryKeyRelatedField(queryset=ProductSold.objects.all())
+    class Meta:
+        model=Sale
+        fields='__all__'
