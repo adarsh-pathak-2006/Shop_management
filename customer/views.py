@@ -4,9 +4,11 @@ from customer.models import Sale, ProductSold
 from customer.serializers import ProductSoldGetSerializer, ProductSoldUpdateSerializer, SaleSerializers, SaleWriteSerializer
 from django.core.cache import cache
 from rest_framework.response import Response
+from utsav.throttling import CoreThrottle
 
 
 class ProductSoldAPI(APIView):
+    throttle_classes=[CoreThrottle]
     def get(self, request):
         cached_data=cache.get("productsold")
         if cached_data:
@@ -25,6 +27,7 @@ class ProductSoldAPI(APIView):
         return Response(serial.errors, status=400)
 
 class ProductSoldIndividualAPI(APIView):
+    throttle_classes=[CoreThrottle]
     def get(self, request, pk):
         cached_data=cache.get(f"productsold_{pk}")
         if cached_data:
@@ -52,6 +55,7 @@ class ProductSoldIndividualAPI(APIView):
         return Response(status=204)
 
 class SaleAPI(APIView):
+    throttle_classes=[CoreThrottle]
     def get(self, request):
         cached_data=cache.get("sale")
         if cached_data:
@@ -70,6 +74,7 @@ class SaleAPI(APIView):
         return Response(serial.errors, status=400)
 
 class SaleIndividualAPI(APIView):
+    throttle_classes=[CoreThrottle]
     def get(self, reques, pk):
         cached_data=cache.get(f"sale_{pk}")
         if cached_data is not None:

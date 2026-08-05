@@ -4,9 +4,11 @@ from inventory.serializers import CategorySerializer, ProductSerializer, Product
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.cache import cache
+from utsav.throttling import CoreThrottle
 
 
 class CategoryAPI(APIView):
+    throttle_classes=[CoreThrottle]
     def get(self, request):
         cached_data=cache.get("category")
         if cached_data:
@@ -25,6 +27,7 @@ class CategoryAPI(APIView):
         return Response(serial.errors, status=400)
 
 class CategoryIndividualAPI(APIView):
+    throttle_classes=[CoreThrottle]
     def get(self, request, pk):
         cached_data=cache.get(f"category_{pk}")
         if cached_data:
@@ -53,6 +56,7 @@ class CategoryIndividualAPI(APIView):
 
 
 class ProductAPI(APIView):
+    throttle_classes=[CoreThrottle]
     def get(self, request):
         cached_data=cache.get("product")
         if cached_data:
@@ -71,6 +75,7 @@ class ProductAPI(APIView):
         return Response(serial.errors, status=400)
 
 class ProductIndividualAPI(APIView):
+    throttle_classes=[CoreThrottle]
     def get(self, request, pk):
         cached_data=cache.get(f"product_{pk}")
         if cached_data:
