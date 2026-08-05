@@ -17,6 +17,7 @@ class ProductSold(models.Model):
 
 class Sale(models.Model):
     products=models.ManyToManyField(ProductSold)
+    date=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.product_name
