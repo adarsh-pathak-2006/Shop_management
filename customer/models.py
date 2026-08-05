@@ -17,6 +17,9 @@ class ProductSold(models.Model):
         if self.product.stock >= self.quantity:
             self.product.stock -= self.quantity
             self.product.save()
+        else:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({"quantity": f"Not enough stock. Only {self.product.stock} left."})
     
         super().save(*args, **kwargs)
     
