@@ -44,12 +44,12 @@ class CategoryIndividualAPI(APIView):
             cache.delete(f"category_{pk}")
             cache.delete("category")
             serial.save()
-            return Response(serial.data, request=200)
+            return Response(serial.data, status=200)
         return Response(serial.errors, status=400)
 
     def delete(self, request, pk):
         data=get_object_or_404(Category, id=pk)
-        cache.delete(f"category_{pk}", status=204)
+        cache.delete(f"category_{pk}")
         cache.delete("category")
         data.delete()
         return Response({'message':'data deleted'}, status=204)

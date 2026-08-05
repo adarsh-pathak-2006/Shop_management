@@ -14,6 +14,7 @@ class ProductSoldUpdateSerializer(ModelSerializer):
     class Meta:
         model=ProductSold
         fields='__all__'
+        read_only_fields = ['total_price']
 
 class SaleSerializers(ModelSerializer):
     products=ProductSoldGetSerializer(read_only=True, many=True)
@@ -22,7 +23,7 @@ class SaleSerializers(ModelSerializer):
         fields='__all__'
 
 class SaleWriteSerializer(ModelSerializer):
-    products=PrimaryKeyRelatedField(queryset=ProductSold.objects.all())
+    products=PrimaryKeyRelatedField(queryset=ProductSold.objects.all(), many=True)
     class Meta:
         model=Sale
         fields='__all__'

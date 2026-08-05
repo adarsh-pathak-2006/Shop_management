@@ -16,7 +16,9 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if self.stock > 0:
-            self.is_avaliable==True
+            self.is_avaliable = True
+        else:
+            self.is_avaliable = False
 
         super().save(*args, **kwargs)
 

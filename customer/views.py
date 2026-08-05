@@ -34,7 +34,7 @@ class ProductSoldIndividualAPI(APIView):
             return Response(cached_data, status=200)
         data=get_object_or_404(ProductSold, id=pk)
         serial=ProductSoldGetSerializer(data)
-        cache.set(f"productsold_{pk}", serial, timeout=300)
+        cache.set(f"productsold_{pk}", serial.data, timeout=300)
         return Response(serial.data, status=200)
 
     def put(self, request, pk):
@@ -75,7 +75,7 @@ class SaleAPI(APIView):
 
 class SaleIndividualAPI(APIView):
     throttle_classes=[CoreThrottle]
-    def get(self, reques, pk):
+    def get(self, request, pk):
         cached_data=cache.get(f"sale_{pk}")
         if cached_data is not None:
             return Response(cached_data, status=200)

@@ -10,7 +10,13 @@ class ProductSold(models.Model):
 
     def save(self, *args, **kwargs):
         price=self.price_per_piece * self.quantity
+        if self.discount > price:
+            self.discount = price
         self.total_price=price - self.discount
+        
+        if self.product.stock >= self.quantity:
+            self.product.stock -= self.quantity
+            self.product.save()
     
         super().save(*args, **kwargs)
     
@@ -20,7 +26,7 @@ class Sale(models.Model):
     date=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.date
+        return str(self.date)
 
 
 
